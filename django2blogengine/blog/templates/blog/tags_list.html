@@ -1,0 +1,12 @@
+{% extends 'blog/base_blog.html' %}
+
+{% block title %}Title{% endblock %}
+
+{% block content %}
+    <h1>Tags:</h1>
+
+    {% for item in tags %}
+        <a href='{{ item.get_absolute_url }}'>{{item.title}}</a>
+        <br>
+    {% endfor %}
+{% endblock %}

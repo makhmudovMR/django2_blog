@@ -1,13 +1,11 @@
 {% extends 'blog/base_blog.html' %}
 
-{% block title %}Posts List{% endblock %}
-
+{% block title %}{{tag.title}}{% endblock %} 
 
 {% block content %}
-    <h1 class='mb-5 mt-5'>Posts:</h1>
+    <h1 class='mb-5 mt-5'>{{tag.title}}:</h1>
     <hr>
     {% for post in posts %}
         {% include "blog/includes/posts.html" %}
     {% endfor %}
-
 {% endblock %}
