@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from .models import Post, Tag
 from django.views.generic import View
+
+from .models import Post, Tag
+from .forms import TagForm
 
 class PostList(View):
     def get(self, request):
@@ -28,7 +30,21 @@ class TagList(View):
         }
         return render(request, 'blog/tags_list.html', context=context)
 
+class TagCreate(View):
 
+    def post(self, request):
+        tf = TagForm(request.POST)
+        if tf.is_valid():
+            new_tag = tf.save()
+            return redirect(new_tag)
+        return render(request, 'blog/tag_create.html', context={'form': tf})
+
+    def get(self, request):
+        tf = TagForm()
+        context = {
+            'form': tf
+        }
+        return render(request, 'blog/tag_create.html', context=context)
 
 class TagDetail(View):
     def get(self, request, slug):
