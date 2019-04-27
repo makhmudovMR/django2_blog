@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 
 from .models import Post, Tag
-from .forms import TagForm
+from .forms import TagForm, PostForm
 
 class PostList(View):
     def get(self, request):
@@ -20,6 +20,19 @@ class PostDetail(View):
         post = get_object_or_404(Post, slug__iexact=slug)
         context={'post':post}
         return render(request, 'blog/post_detail.html', context=context)
+
+class PostCreate(View):
+    def get(self, request):
+        form = PostForm()
+        return render(request, 'blog/post_form_create.html', context={'form': form})
+
+    def post(self, request):
+        form = PostForm(request.POST)
+        if form.is_valid():
+            new_post = form.save()
+            return redirect(new_post)
+        return render(request, 'blog/post_form_create.html', context={'form': form})
+
 
 
 class TagList(View):
