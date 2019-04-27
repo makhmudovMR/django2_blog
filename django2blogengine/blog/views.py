@@ -11,6 +11,7 @@ class PostList(View):
         posts = Post.objects.all()
         context = {
             'posts': posts,
+            'admin_object':None
             }
         return render(request, 'blog/index.html', context=context)
 
@@ -18,7 +19,7 @@ class PostList(View):
 class PostDetail(View):
     def get(self, request, slug):
         post = get_object_or_404(Post, slug__iexact=slug)
-        context={'post':post}
+        context={'post':post, 'admin_object':post}
         return render(request, 'blog/post_detail.html', context=context)
 
 
@@ -39,7 +40,7 @@ class PostUpdate(View):
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         form = PostForm(instance=post)
-        return render(request, 'blog/post_update_form.html', context={'form': form, 'post': post})
+        return render(request, 'blog/post_update_form.html', context={'form': form, 'post': post, 'admin_object':post})
 
     def post(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
@@ -47,14 +48,14 @@ class PostUpdate(View):
         if form.is_valid():
             updated_post = form.save()
             return redirect(updated_post)
-        return render(request, 'blog/post_update_form.html', context={'form': form, 'post': post})
+        return render(request, 'blog/post_update_form.html', context={'form': form, 'post': post, 'admin_object':post})
 
 
 class PostDelete(View):
 
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
-        return render(request, 'blog/post_delete_form.html', {'post': post})
+        return render(request, 'blog/post_delete_form.html', {'post': post, 'admin_object':post})
 
     def post(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
@@ -70,6 +71,7 @@ class TagList(View):
         tags = Tag.objects.all()
         context = {
             'tags': tags,
+            'admin_object':tags
         }
         return render(request, 'blog/tags_list.html', context=context)
 
@@ -95,7 +97,8 @@ class TagDetail(View):
         posts = tag.posts.all()
         context = {
             'tag': tag,
-            'posts': posts
+            'posts': posts,
+            'admin_object':tag
         }
         return render(request, 'blog/tag_detail.html', context=context)
 
@@ -105,7 +108,7 @@ class TagUpdate(View):
     def get(self, request, slug):
         tag = Tag.objects.get(slug__iexact=slug)
         form = TagForm(instance=tag)
-        return render(request, 'blog/tag_update_form.html', context={'form': form, 'tag': tag})
+        return render(request, 'blog/tag_update_form.html', context={'form': form, 'tag': tag, 'admin_object':tag})
 
     def post(self, request, slug):
         tag = Tag.objects.get(slug__iexact=slug)
@@ -119,7 +122,7 @@ class TagDelete(View):
 
     def get(self, request, slug):
         tag = Tag.objects.get(slug__iexact=slug)
-        return render(request, 'blog/tag_delete_form.html', {'tag': tag})
+        return render(request, 'blog/tag_delete_form.html', {'tag': tag, 'admin_object':tag})
 
     def post(self, request, slug):
         tag = Tag.objects.get(slug__iexact=slug)

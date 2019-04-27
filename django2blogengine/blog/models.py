@@ -22,6 +22,15 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse("post_detail", kwargs={"slug": self.slug})
+
+    def get_url_create(self):
+        return reverse("post_create")
+
+    def get_url_delete(self):
+        return reverse("post_delete", kwargs={'slug':self.slug})
+
+    def get_url_update(self):
+        return reverse("post_update", kwargs={'slug':self.slug})
     
 
     def __str__(self):
@@ -37,6 +46,16 @@ class Tag(models.Model):
     
     def get_update_url(self):
         return reverse('tag_update', kwargs={'slug': self.slug})
+
+
+    def get_url_create(self):
+        return reverse("tag_create")
+
+    def get_url_delete(self):
+        return reverse("tag_delete", kwargs={'slug':self.slug})
+
+    def get_url_update(self):
+        return reverse("tag_update", kwargs={'slug':self.slug})
 
     def __str__(self):
         return '{}'.format(self.title)
