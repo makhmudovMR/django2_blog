@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import View
@@ -102,3 +102,14 @@ class TagUpdate(View):
             new_tag = form.save()
             return redirect(new_tag)
         return render(request, 'blog/tag_update_form.html', context={'form': form, 'tag': tag})
+
+class TagDelete(View):
+
+    def get(self, request, slug):
+        tag = Tag.objects.get(slug__iexact=slug)
+        return render(request, 'blog/tag_delete_form.html', {'tag': tag})
+
+    def post(self, request, slug):
+        tag = Tag.objects.get(slug__iexact=slug)
+        tag.delete()
+        return redirect(reverse('tags_list'))
