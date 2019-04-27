@@ -1,14 +1,14 @@
 {% extends "blog/base_blog.html" %}
 
 {% block title %}
-    Tag Delete
+    Post Delete
 {% endblock title %}
 
 {% block content %}
-    <form action='{% url "tag_delete" slug=tag.slug %}' method='post'>
+    <form action='{% url "post_delete" slug=post.slug %}' method='post'>
         {% csrf_token %}
         <h1>Are you serious?</h1>
         <button class='btn btn-danger'>Delete</button>
-        <a href='{% url "tag_detail" slug=tag.slug %}' class='btn btn-primary'>Cancel</a>
+        <a href='{% url "post_detail" slug=post.slug %}' class='btn btn-primary'>Cancel</a>
     </form>
 {% endblock content %}

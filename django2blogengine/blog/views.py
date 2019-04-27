@@ -49,8 +49,20 @@ class PostUpdate(View):
             return redirect(updated_post)
         return render(request, 'blog/post_update_form.html', context={'form': form, 'post': post})
 
-# Tags
 
+class PostDelete(View):
+
+    def get(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)
+        return render(request, 'blog/post_delete_form.html', {'post': post})
+
+    def post(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)
+        post.delete()
+        return redirect(reverse('posts_list'))
+
+
+# Tags
 
 
 class TagList(View):
