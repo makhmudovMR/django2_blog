@@ -2,9 +2,12 @@ from django.shortcuts import render, redirect, reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import View
+from django.contrib.auth.mixins import LoginRequiredMixin # класс для ограничения доступа к страницам
 
 from .models import Post, Tag
 from .forms import TagForm, PostForm
+
+
 
 class PostList(View):
     def get(self, request):
@@ -23,7 +26,10 @@ class PostDetail(View):
         return render(request, 'blog/post_detail.html', context=context)
 
 
-class PostCreate(View):
+class PostCreate(LoginRequiredMixin, View):
+
+    raise_exception = True # для ограничения доступа к странице
+
     def get(self, request):
         form = PostForm()
         return render(request, 'blog/post_form_create.html', context={'form': form})
@@ -36,7 +42,8 @@ class PostCreate(View):
         return render(request, 'blog/post_form_create.html', context={'form': form})
 
 
-class PostUpdate(View):
+class PostUpdate(LoginRequiredMixin,View):
+    raise_exception = True
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         form = PostForm(instance=post)
@@ -51,8 +58,8 @@ class PostUpdate(View):
         return render(request, 'blog/post_update_form.html', context={'form': form, 'post': post, 'admin_object':post})
 
 
-class PostDelete(View):
-
+class PostDelete(LoginRequiredMixin, View):
+    raise_exception = True
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         return render(request, 'blog/post_delete_form.html', {'post': post, 'admin_object':post})
@@ -75,8 +82,8 @@ class TagList(View):
         }
         return render(request, 'blog/tags_list.html', context=context)
 
-class TagCreate(View):
-
+class TagCreate(LoginRequiredMixin, View):
+    raise_exception = True
     def post(self, request):
         tf = TagForm(request.POST)
         if tf.is_valid():
@@ -103,7 +110,8 @@ class TagDetail(View):
         return render(request, 'blog/tag_detail.html', context=context)
 
 
-class TagUpdate(View):
+class TagUpdate(LoginRequiredMixin, View):
+    raise_exception = True
 
     def get(self, request, slug):
         tag = Tag.objects.get(slug__iexact=slug)
@@ -118,8 +126,8 @@ class TagUpdate(View):
             return redirect(new_tag)
         return render(request, 'blog/tag_update_form.html', context={'form': form, 'tag': tag})
 
-class TagDelete(View):
-
+class TagDelete(LoginRequiredMixin, View):
+    raise_exception = True
     def get(self, request, slug):
         tag = Tag.objects.get(slug__iexact=slug)
         return render(request, 'blog/tag_delete_form.html', {'tag': tag, 'admin_object':tag})

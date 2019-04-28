@@ -41,11 +41,14 @@
 				</div>
 			</div>
 		</div>
+		{% if request.user.is_authenticated and request.user.is_staff %}
 		<div class='admin_panel align-items-center'>
 			<a href='' class='btn btn-link'>Admin</a>
 			{% block admin-panel %}
 			
 			{% endblock admin-panel %}
 		</div>
+		{% endif %}
+		
 	</body>
 </html>
